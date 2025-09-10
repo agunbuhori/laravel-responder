@@ -67,7 +67,7 @@ class Responder implements ResponderInterface
 
     private function transformData(mixed $data): mixed
     {
-        if (! $this->transformer) return $data;
+        if (!$this->transformer) return $data;
 
         if ($data instanceof \Illuminate\Support\Collection) {
             return $data->map(fn ($item) => $this->transformer->handle($item))->toArray();
