@@ -154,6 +154,76 @@ responder()
 
 ---
 
+## 🔨 Artisan Command
+
+This package provides a command to **generate Transformer classes**.
+
+### Usage
+
+```bash
+php artisan make:responder-transformer {name} {--model=}
+```
+
+- `{name}` → The name of the transformer class  
+- `--model` (optional) → Bind the transformer to an Eloquent model  
+
+### Examples
+
+**Without model:**
+
+```bash
+php artisan make:responder-transformer UserTransformer
+```
+
+Generates:
+
+```php
+<?php
+
+namespace App\Http\Transformers;
+
+use Agunbuhori\Responder\Transformer;
+
+class UserTransformer extends Transformer
+{
+    public function transform(mixed $user): array
+    {
+        return [
+            'id' => $user['id'] ?? null,
+        ];
+    }
+}
+```
+
+**With model:**
+
+```bash
+php artisan make:responder-transformer UserTransformer --model=User
+```
+
+Generates:
+
+```php
+<?php
+
+namespace App\Http\Transformers;
+
+use Agunbuhori\Responder\Transformer;
+use App\Models\User;
+
+class UserTransformer extends Transformer
+{
+    public function transform(User $user): array
+    {
+        return [
+            'id' => $user->id,
+        ];
+    }
+}
+```
+
+---
+
 ## ✅ Features
 
 ```txt
@@ -163,31 +233,7 @@ responder()
 - HasResponder trait for quick success/error responses
 - responder() helper for convenience
 - Supports wrapped and unwrapped responses
-```
-
----
-
-## 🛠 Example Service Provider (optional)
-
-```php
-namespace App\Providers;
-
-use Illuminate\Support\ServiceProvider;
-use Agunbuhori\Responder\Responder;
-use Agunbuhori\Responder\Interfaces\ResponderInterface;
-
-class ResponderServiceProvider extends ServiceProvider
-{
-    public function register(): void
-    {
-        $this->app->singleton(ResponderInterface::class, Responder::class);
-    }
-
-    public function boot(): void
-    {
-        //
-    }
-}
+- Artisan command to auto-generate Transformers
 ```
 
 ---
