@@ -1,6 +1,7 @@
 {
     "name": "agunbuhori/responder",
     "description": "Laravel settings manager package",
+    "license": "MIT",
     "type": "library",
     "autoload": {
         "psr-4": {
