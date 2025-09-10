@@ -6,5 +6,4 @@ use Illuminate\Database\Eloquent\Model;
 
 interface TransformerInterface
 {
-    // public function transform($data): array;
 }
