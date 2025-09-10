@@ -1,0 +1,20 @@
+{
+    "name": "agunbuhori/responder",
+    "description": "Laravel settings manager package",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Agunbuhori\\Responder\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Agunbuhori\\Responder\\ResponderServiceProvider"
+            ]
+        }
+    }
+}
