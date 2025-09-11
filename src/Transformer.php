@@ -17,7 +17,7 @@ abstract class Transformer implements TransformerInterface
 
         if ($data instanceof Collection) {
             return $data->map(fn ($item) => $this->transform($item))->toArray();
-        } else if (! $this->isAssoc($data)) {
+        } else if (is_array($data) && !$this->isAssoc($data)) {
             return collect($data)->map(fn ($item) => $this->transform($item))->toArray();
         }
 
