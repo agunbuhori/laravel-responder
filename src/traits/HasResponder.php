@@ -16,7 +16,7 @@ trait HasResponder
      * @param mixed $message
      * @return \Illuminate\Http\JsonResponse
      */
-    public function success($data = [], ?Transformer $transformer = null, $status = 200, $message = "success")
+    public function success($data = [], Transformer|string|null $transformer = null, $status = 200, $message = "success")
     {
         return app(ResponderInterface::class)
             ->data($data, $transformer)
