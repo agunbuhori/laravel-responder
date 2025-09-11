@@ -69,12 +69,6 @@ class Responder implements ResponderInterface
     {
         if (!$this->transformer) return $data;
 
-        if ($data instanceof \Illuminate\Support\Collection) {
-            return $data->map(fn ($item) => $this->transformer->handle($item))->toArray();
-        } else if ($data instanceof \Illuminate\Database\Eloquent\Model) {
-            return $this->transformer->handle($data);
-        }
-
-        return $data;
+        return $this->transformer->handle($data);
     }
 }

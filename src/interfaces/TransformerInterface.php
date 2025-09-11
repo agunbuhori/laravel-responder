@@ -6,4 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 interface TransformerInterface
 {
+    public function handle(mixed $data): mixed;
 }
