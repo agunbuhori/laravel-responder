@@ -26,16 +26,20 @@ class GenerateTransformerCommand extends Command
      */
     public function handle(): void
     {
-        $name = Str::studly($this->argument('name'));
-        $model = $this->option('model') ? Str::studly($this->option('model')) : null;
+        $rawName = $this->argument('name');
+        $model   = $this->option('model') ? Str::studly($this->option('model')) : null;
 
-        $className = $name;
+        // Normalize class name & sub-namespace
+        $className     = Str::studly(class_basename($rawName));
+        $subNamespace  = trim(Str::replace('/', '\\', Str::beforeLast($rawName, '/')), '\\');
+        $namespace     = 'App\\Http\\Transformers' . ($subNamespace ? "\\{$subNamespace}" : '');
 
-        $variable = Str::camel($model ?? $name);
+        // File path
+        $path = app_path('Http/Transformers/' . str_replace('\\', '/', $rawName) . '.php');
 
-        $namespace = 'App\\Http\\Transformers';
-
-        $path = app_path("Http/Transformers/{$className}.php");
+        // Variable name (prefer model if provided, otherwise class base name)
+        $baseName = $model ?? $className;
+        $variable = Str::camel(preg_replace('/Transformer$/', '', $baseName));
 
         if (file_exists($path)) {
             $this->error("Transformer already exists: {$path}");
@@ -46,14 +50,14 @@ class GenerateTransformerCommand extends Command
             mkdir(dirname($path), 0755, true);
         }
 
-        $imports = "use Agunbuhori\\Responder\\Transformer;";
+        $imports   = "use Agunbuhori\\Responder\\Transformer;";
         $signature = "mixed \${$variable}";
-        $returnId = "'id' => \${$variable}['id'] ?? null,";
+        $returnId  = "'id' => \${$variable}['id'] ?? null,";
 
         if ($model) {
-            $imports .= PHP_EOL . "use App\\Models\\{$model};";
+            $imports  .= PHP_EOL . "use App\\Models\\{$model};";
             $signature = "{$model} \${$variable}";
-            $returnId = "'id' => \${$variable}->id,";
+            $returnId  = "'id' => \${$variable}->id,";
         }
 
         $stub = <<<PHP
